@@ -70,7 +70,7 @@ def build_model(X,y,x_input):
     model.add(Dense(1))
     model.compile(optimizer='adam', loss='mse')
     
-    model.fit(X, y, epochs=5, verbose=1)
+    model.fit(X, y, epochs=100, verbose=1)
 
     
 
