@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="icon" type="image/png" href="" />
+    <title>Stockify</title>
+
+    <style>
+        * {
+            margin: 0%;
+            padding: 0%;
+        }
+
+
+        header {
+            color: rgb(255, 255, 255);
+            background-color: rgba(4, 0, 255, 0.5);
+            font-size: xx-large;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            align-content: center;
+            text-align: center;
+            justify-items: center;
+            position: sticky;
+            top: 0;
+            height: 110px;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .left-container {
+            margin-left: 8%;
+            margin-bottom: 5%;
+        }
+
+        #modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(255, 255, 255, .8) url('http://i.stack.imgur.com/FhHRx.gif') 50% 50% no-repeat;
+        }
+
+        .navbar {
+            background-image: linear-gradient(to right, black, rgb(255, 255, 255));
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 50px;
+            position: sticky;
+            top: 110px;
+        }
+
+        .navbar nav {
+            margin-left: 4%;
+        }
+
+        .navbar nav:hover {
+            cursor: pointer;
+        }
+
+        a {
+            text-decoration: none;
+            color: white;
+        }
+
+        #ticker:hover {
+            cursor: pointer;
+        }
+
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td,
+        th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+
+
+        @media only screen and (max-width: 500px) {
+            .main-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <header class="header">
+        <h3>Stockify</h3>
+        <h5>The Stocks Prediction Dashboard</h5>
+    </header>
+
+    <div class="navbar">
+        <nav><a target="_blank" href="https://www.linkedin.com/in/samrat-sakha-2a62841a3/">LinkedIn</a></nav>
+        <nav><a target="_blank" href="https://github.com/samratsakha">Github</a></nav>
+        <nav><a target="_blank" href="https://samratsakha.github.io/testing.github.io/">WebPage</a></nav>
+        <nav><a target="_blank" href="mailto:samratsakha54@gmail.com">Mail</a></nav>
+    </div>
+
+    <div class="main-content">
+
+        <div class="left-container">
+            <h4>Enter your Stocks Ticker name here</h4>
+            <input id="at" type="text" placeholder="Enter Stocks Ticker"><br><br>
+            <a id="ticker" href="https://finance.yahoo.com/lookup/" target="_blank"><span style="color: blue;">Click
+                    here to know ticker value of your stocks</span></a><br><br>
+
+            <button id="btn1" onclick="func1()">Predict Stocks</button><br><br>
+
+            <h3 id="output" style="display: none; color: red;"></h3>
+
+            <div id="table" style="display: none;">
+                <table>
+                    <tr>
+                        <th>DAY</th>
+                        <th id="row">Stock value</th>
+                    </tr>
+                    <tr>
+                        <td>Day 1</td>
+                        <td id="row1">123</td>
+                    </tr>
+                    <tr>
+                        <td>Day 2</td>
+                        <td id="row2">123</td>
+                    </tr>
+                    <tr>
+                        <td>Day 3</td>
+                        <td id="row3">123</td>
+                    </tr>
+                    <tr>
+                        <td>Day 4</td>
+                        <td id="row4">123</td>
+                    </tr>
+                    <tr>
+                        <td>Day 5</td>
+                        <td id="row5">123</td>
+                    </tr>
+                    <tr>
+                        <td>Day 6</td>
+                        <td id="row6">123</td>
+                    </tr>
+                    <tr>
+                        <td>Day 7</td>
+                        <td id="row7">123</td>
+                    </tr>
+
+                    <tr>
+                        <td>Day 8</td>
+                        <td id="row8">123</td>
+                    </tr>
+                    <tr>
+                        <td>Day 9</td>
+                        <td id="row9">123</td>
+                    </tr>
+                    <tr>
+                        <td>Day 10</td>
+                        <td id="row10">123</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div id="modal">
+        <!-- Place at bottom of page -->
+    </div>
+
+</body>
+<script type="text/javascript">
+
+    var stock_name = "NONE";
+
+    function func1() {
+
+        var at = document.getElementById("at").value;
+
+        if (at.trim() == "") {
+            alert("Please enter ticker name");
+            document.getElementById("at").style.border = "solid 3px red";
+            return;
+        }
+        else {
+            document.getElementById("at").style.border = "solid 1px black";
+        }
+
+        stock_name = at;
+
+
+        document.getElementById("modal").style.display = "block";
+
+        var entry = {
+            val_array: stock_name
+        };
+
+        fetch('/to_model', {
+            method: 'POST',
+            credentials: 'include',
+            body: JSON.stringify(entry),
+            cache: 'no-cache',
+            headers: new Headers({
+                'content-type': 'application/json'
+            })
+        })
+            .then(function (response) {
+                if (response.status !== 200) {
+                    document.getElementById("modal").style.display = "none";
+                    document.getElementById("output1").innerHTML = "Error : Model did not Respond";
+                    document.getElementById("output1").style.display = "block";
+                    console.log('Response status was not 200');
+                    return;
+                }
+
+                response.json().then(function (data) {
+                    document.getElementById("modal").style.display = "none";
+                    var display_out = JSON.stringify(data);
+                    var outs = JSON.parse(display_out);
+
+                    var recieve_output = outs.output;
+
+                    if(recieve_output.trim()=="WRONG"){
+                        document.getElementById("output").innerHTML = "Ticker value not found.";
+                        document.getElementById("output").style.display = "block";
+                        return;
+                    }
+                    else{
+                        document.getElementById("output").style.display = "none";
+                    }
+
+                    if(recieve_output.trim()=="EXCEPTION"){
+                        document.getElementById("output").innerHTML = "Error occured with model.";
+                        document.getElementById("output").style.display = "block";
+                        return;
+                    }
+                    else{
+                        document.getElementById("output").style.display = "none";
+                    }
+
+                    var stock_array = JSON.parse(recieve_output); 
+
+                    for(var i=0;i<stock_array.length;i++){
+                        var id_name = "row"+(i+1);
+                        document.getElementById(id_name).innerHTML = stock_array[i];
+                    }
+
+                    document.getElementById("table").style.display = "block";
+
+
+                })
+            })
+
+
+
+
+    }
+
+</script>
+
+</html>
