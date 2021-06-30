@@ -235,8 +235,8 @@
             .then(function (response) {
                 if (response.status !== 200) {
                     document.getElementById("modal").style.display = "none";
-                    document.getElementById("output1").innerHTML = "Error : Model did not Respond";
-                    document.getElementById("output1").style.display = "block";
+                    document.getElementById("output").innerHTML = "Error : Model did not Respond";
+                    document.getElementById("output").style.display = "block";
                     console.log('Response status was not 200');
                     return;
                 }
