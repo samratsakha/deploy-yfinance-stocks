@@ -11,6 +11,10 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- ChartJs library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
     <link rel="icon" type="image/png" href="" />
     <title>Stockify</title>
 
@@ -45,6 +49,14 @@
         .left-container {
             margin-left: 8%;
             margin-bottom: 5%;
+            width: 35%;
+        }
+
+        .right-container {
+            height: 50%;
+            width: 50%;
+            margin: 5%;
+            color: black;
         }
 
         #modal {
@@ -93,7 +105,7 @@
         td,
         th {
             border: 1px solid #dddddd;
-            text-align: left;
+            text-align: center;
             padding: 8px;
         }
 
@@ -102,9 +114,39 @@
         }
 
 
+        @media only screen and (max-width: 1000px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .left-container{
+                width: 50%;
+            }
+            .right-container{
+                width: 70%;
+            }
+        }
+
+        @media only screen and (max-width: 750px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .left-container{
+                width: 70%;
+            }
+            .right-container{
+                width: 80%;
+            }
+        }
+
         @media only screen and (max-width: 500px) {
             .main-content {
                 flex-direction: column;
+            }
+            .left-container{
+                width: 80%;
+            }
+            .right-container{
+                width: 90%;
             }
         }
     </style>
@@ -140,52 +182,56 @@
             <div id="table" style="display: none;">
                 <table>
                     <tr>
-                        <th>DAY</th>
+                        <th>DATE</th>
                         <th id="row">Stock value</th>
                     </tr>
                     <tr>
-                        <td>Day 1</td>
+                        <td id="day1">Day 1</td>
                         <td id="row1">123</td>
                     </tr>
                     <tr>
-                        <td>Day 2</td>
+                        <td id="day2">Day 2</td>
                         <td id="row2">123</td>
                     </tr>
                     <tr>
-                        <td>Day 3</td>
+                        <td id="day3">Day 3</td>
                         <td id="row3">123</td>
                     </tr>
                     <tr>
-                        <td>Day 4</td>
+                        <td id="day4">Day 4</td>
                         <td id="row4">123</td>
                     </tr>
                     <tr>
-                        <td>Day 5</td>
+                        <td id="day5">Day 5</td>
                         <td id="row5">123</td>
                     </tr>
                     <tr>
-                        <td>Day 6</td>
+                        <td id="day6">Day 6</td>
                         <td id="row6">123</td>
                     </tr>
                     <tr>
-                        <td>Day 7</td>
+                        <td id="day7">Day 7</td>
                         <td id="row7">123</td>
                     </tr>
 
                     <tr>
-                        <td>Day 8</td>
+                        <td id="day8">Day 8</td>
                         <td id="row8">123</td>
                     </tr>
                     <tr>
-                        <td>Day 9</td>
+                        <td id="day9">Day 9</td>
                         <td id="row9">123</td>
                     </tr>
                     <tr>
-                        <td>Day 10</td>
+                        <td id="day10">Day 10</td>
                         <td id="row10">123</td>
                     </tr>
                 </table>
             </div>
+        </div>
+
+        <div class="right-container">
+            <canvas style="display: none;" id="myChart"></canvas>
         </div>
 
     </div>
@@ -200,6 +246,9 @@
 <script type="text/javascript">
 
     var stock_name = "NONE";
+
+    // For plotting the line chart
+    var stocks_arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     function func1() {
 
@@ -248,32 +297,35 @@
 
                     var recieve_output = outs.output;
 
-                    if(recieve_output.trim()=="WRONG"){
+                    if (recieve_output.trim() == "WRONG") {
                         document.getElementById("output").innerHTML = "Ticker value not found.";
                         document.getElementById("output").style.display = "block";
                         return;
                     }
-                    else{
+                    else {
                         document.getElementById("output").style.display = "none";
                     }
 
-                    if(recieve_output.trim()=="EXCEPTION"){
+                    if (recieve_output.trim() == "EXCEPTION") {
                         document.getElementById("output").innerHTML = "Error occured with model.";
                         document.getElementById("output").style.display = "block";
                         return;
                     }
-                    else{
+                    else {
                         document.getElementById("output").style.display = "none";
                     }
 
-                    var stock_array = JSON.parse(recieve_output); 
+                    var stock_array = JSON.parse(recieve_output);
 
-                    for(var i=0;i<stock_array.length;i++){
-                        var id_name = "row"+(i+1);
+                    for (var i = 0; i < stock_array.length; i++) {
+                        var id_name = "row" + (i + 1);
                         document.getElementById(id_name).innerHTML = stock_array[i];
                     }
 
+                    stocks_arr = stock_array;
+
                     document.getElementById("table").style.display = "block";
+                    document.getElementById("myChart").style.display = "block";
 
 
                 })
@@ -283,6 +335,72 @@
 
 
     }
+
+
+    // Get the current date
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+
+
+    // Check for corner date conditions to display
+    var month_arr = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    var month = Number(mm);
+    var day = Number(dd);
+    var year = Number(yyyy);
+
+    // Check for leap year
+    if (year % 4 == 0 || year % 400 == 0) {
+        month_arr[1] = 29;
+    }
+
+    var dates = [];
+
+
+    for (var i = 0; i < 10; i++) {
+        id_name = "day" + (i + 1);
+        if (day > month_arr[month - 1]) {
+            day = 1;
+        }
+        document.getElementById(id_name).innerHTML = day + ' - ' + mm + ' - ' + yyyy;
+        dates.push(day+'/'+mm);
+        day++;
+    }
+
+
+
+    // Charts 
+
+    let mychart = document.getElementById('myChart').getContext('2d');
+
+
+    // Configure your data for plotting the line chart
+    let data = {
+        labels: dates,
+        datasets: [{
+            label: 'Predicted Stocks Data',
+            data: stocks_arr,
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+        }]
+    };
+
+
+    // Plot the chart
+    let reviewchart = new Chart(mychart, {
+        type: 'line',
+        data: data,
+        options: {
+            title: {
+                display: true,
+                text: 'Predicted Stocks Forecasting Chart',
+                fontSize: 20,
+                fontColor : 'black'
+            }
+        }
+    });
 
 </script>
 
