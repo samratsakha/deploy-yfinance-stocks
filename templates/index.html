@@ -113,7 +113,7 @@
             background-color: #dddddd;
         }
 
-        #loading-status{
+        #loading-status {
             display: flex;
             justify-content: center;
             margin-top: 150px;
@@ -260,8 +260,6 @@
 
     var stock_name = "NONE";
 
-    // For plotting the line chart
-    var stocks_arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     function func1() {
 
@@ -280,6 +278,7 @@
 
 
         document.getElementById("modal").style.display = "block";
+        loadingStatus();
 
         var entry = {
             val_array: stock_name
@@ -335,9 +334,7 @@
                         document.getElementById(id_name).innerHTML = stock_array[i];
                     }
 
-                    for (var i = 0; i < stock_array.length; i++) {
-                        stocks_arr[i] = stock_array[i];
-                    }
+                    plot_chart(stock_array);
 
                     document.getElementById("table").style.display = "block";
                     document.getElementById("myChart").style.display = "block";
@@ -385,65 +382,71 @@
     }
 
 
-
     // Charts 
 
-    let mychart = document.getElementById('myChart').getContext('2d');
+    function plot_chart(stock_values) {
+
+        let mychart = document.getElementById('myChart').getContext('2d');
 
 
-    // Configure your data for plotting the line chart
-    let data = {
-        labels: dates,
-        datasets: [{
-            label: 'Predicted Stocks Data',
-            data: stocks_arr,
-            fill: false,
-            borderColor: 'rgb(75, 192, 192)',
-            tension: 0.1
-        }]
-    };
+        // Configure your data for plotting the line chart
+        let data = {
+            labels: dates,
+            datasets: [{
+                label: 'Predicted Stocks Data',
+                data: stock_values,
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        };
 
 
-    // Plot the chart
-    let reviewchart = new Chart(mychart, {
-        type: 'line',
-        data: data,
-        options: {
-            title: {
-                display: true,
-                text: 'Predicted Stocks Forecasting Chart',
-                fontSize: 20,
-                fontColor: 'black'
+        // Plot the chart
+        let reviewchart = new Chart(mychart, {
+            type: 'line',
+            data: data,
+            options: {
+                title: {
+                    display: true,
+                    text: 'Predicted Stocks Forecasting Chart',
+                    fontSize: 20,
+                    fontColor: 'black'
+                }
             }
-        }
-    });
+        });
+
+    }
 
 
     // Timeout Functions for loading status
 
-    setTimeout(function(){ 
-        document.getElementById("loading-status").innerHTML = "Fetching stocks data";
-    }, 2000);
+    function loadingStatus() {
+        setTimeout(function () {
+            document.getElementById("loading-status").innerHTML = "Fetching stocks data";
+        }, 2000);
 
-    setTimeout(function(){ 
-        document.getElementById("loading-status").innerHTML = "Processing stocks data";
-    }, 6000);
+        setTimeout(function () {
+            document.getElementById("loading-status").innerHTML = "Processing stocks data";
+        }, 6000);
 
-    setTimeout(function(){ 
-        document.getElementById("loading-status").innerHTML = "Building stocks model";
-    }, 11000);
+        setTimeout(function () {
+            document.getElementById("loading-status").innerHTML = "Building stocks model";
+        }, 11000);
 
-    setTimeout(function(){ 
-        document.getElementById("loading-status").innerHTML = "Training the model";
-    }, 17000);
+        setTimeout(function () {
+            document.getElementById("loading-status").innerHTML = "Training the model";
+        }, 17000);
 
-    setTimeout(function(){ 
-        document.getElementById("loading-status").innerHTML = "Making predictions";
-    }, 23000);
+        setTimeout(function () {
+            document.getElementById("loading-status").innerHTML = "Making predictions";
+        }, 23000);
 
-    setTimeout(function(){ 
-        document.getElementById("loading-status").innerHTML = "Just few more seconds";
-    }, 28000);
+        setTimeout(function () {
+            document.getElementById("loading-status").innerHTML = "Just few more seconds";
+        }, 28000);
+
+    }
 
 
 </script>
