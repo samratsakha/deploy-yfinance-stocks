@@ -422,6 +422,8 @@
     // Timeout Functions for loading status
 
     function loadingStatus() {
+        document.getElementById("loading-status").innerHTML = "";
+
         setTimeout(function () {
             document.getElementById("loading-status").innerHTML = "Fetching stocks data";
         }, 2000);
