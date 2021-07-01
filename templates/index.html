@@ -113,15 +113,23 @@
             background-color: #dddddd;
         }
 
+        #loading-status{
+            display: flex;
+            justify-content: center;
+            margin-top: 150px;
+        }
+
 
         @media only screen and (max-width: 1000px) {
             .main-content {
                 flex-direction: column;
             }
-            .left-container{
+
+            .left-container {
                 width: 50%;
             }
-            .right-container{
+
+            .right-container {
                 width: 70%;
             }
         }
@@ -130,10 +138,12 @@
             .main-content {
                 flex-direction: column;
             }
-            .left-container{
+
+            .left-container {
                 width: 70%;
             }
-            .right-container{
+
+            .right-container {
                 width: 80%;
             }
         }
@@ -142,10 +152,12 @@
             .main-content {
                 flex-direction: column;
             }
-            .left-container{
+
+            .left-container {
                 width: 80%;
             }
-            .right-container{
+
+            .right-container {
                 width: 90%;
             }
         }
@@ -240,6 +252,7 @@
 
     <div id="modal">
         <!-- Place at bottom of page -->
+        <h2 id="loading-status"></h2>
     </div>
 
 </body>
@@ -322,7 +335,9 @@
                         document.getElementById(id_name).innerHTML = stock_array[i];
                     }
 
-                    stocks_arr = stock_array;
+                    for (var i = 0; i < stock_array.length; i++) {
+                        stocks_arr[i] = stock_array[i];
+                    }
 
                     document.getElementById("table").style.display = "block";
                     document.getElementById("myChart").style.display = "block";
@@ -347,7 +362,7 @@
     // Check for corner date conditions to display
     var month_arr = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     var month = Number(mm);
-    var day = Number(dd);
+    var day = Number(dd) + 1;
     var year = Number(yyyy);
 
     // Check for leap year
@@ -355,6 +370,7 @@
         month_arr[1] = 29;
     }
 
+    //labels for x-axis of the chart
     var dates = [];
 
 
@@ -364,7 +380,7 @@
             day = 1;
         }
         document.getElementById(id_name).innerHTML = day + ' - ' + mm + ' - ' + yyyy;
-        dates.push(day+'/'+mm);
+        dates.push(day + '/' + mm);
         day++;
     }
 
@@ -397,10 +413,38 @@
                 display: true,
                 text: 'Predicted Stocks Forecasting Chart',
                 fontSize: 20,
-                fontColor : 'black'
+                fontColor: 'black'
             }
         }
     });
+
+
+    // Timeout Functions for loading status
+
+    setTimeout(function(){ 
+        document.getElementById("loading-status").innerHTML = "Fetching stocks data";
+    }, 2000);
+
+    setTimeout(function(){ 
+        document.getElementById("loading-status").innerHTML = "Processing stocks data";
+    }, 6000);
+
+    setTimeout(function(){ 
+        document.getElementById("loading-status").innerHTML = "Building stocks model";
+    }, 11000);
+
+    setTimeout(function(){ 
+        document.getElementById("loading-status").innerHTML = "Training the model";
+    }, 17000);
+
+    setTimeout(function(){ 
+        document.getElementById("loading-status").innerHTML = "Making predictions";
+    }, 23000);
+
+    setTimeout(function(){ 
+        document.getElementById("loading-status").innerHTML = "Just few more seconds";
+    }, 28000);
+
 
 </script>
 
